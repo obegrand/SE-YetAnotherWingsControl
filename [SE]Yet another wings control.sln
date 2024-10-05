@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35323.107
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "[SE]Yet another wings control", "[SE]Yet another wings control\[SE]Yet another wings control.csproj", "{EBED4165-9EBA-4757-B7A5-864B0B6ACF5F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EBED4165-9EBA-4757-B7A5-864B0B6ACF5F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EBED4165-9EBA-4757-B7A5-864B0B6ACF5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EBED4165-9EBA-4757-B7A5-864B0B6ACF5F}.Debug|x64.ActiveCfg = Debug|x64
+		{EBED4165-9EBA-4757-B7A5-864B0B6ACF5F}.Debug|x64.Build.0 = Debug|x64
+		{EBED4165-9EBA-4757-B7A5-864B0B6ACF5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EBED4165-9EBA-4757-B7A5-864B0B6ACF5F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EBED4165-9EBA-4757-B7A5-864B0B6ACF5F}.Release|x64.ActiveCfg = Release|x64
+		{EBED4165-9EBA-4757-B7A5-864B0B6ACF5F}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9CF4AF06-6A5D-4D53-82A8-C611834EF2B2}
+	EndGlobalSection
+EndGlobal
