@@ -1,58 +1,79 @@
-﻿using Sandbox.ModAPI.Ingame;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Linq;
+using System.Text;
+using Sandbox.Game.EntityComponents;
+using Sandbox.ModAPI.Ingame;
+using Sandbox.ModAPI.Interfaces;
+using SpaceEngineers.Game.ModAPI.Ingame;
+using VRage;
+using VRage.Collections;
+using VRage.Game;
+using VRage.Game.Components;
+using VRage.Game.GUI.TextPanel;
+using VRage.Game.ModAPI.Ingame;
+using VRage.Game.ModAPI.Ingame.Utilities;
+using VRage.Game.ObjectBuilders.Definitions;
 using VRageMath;
 
-namespace ScriptingClass
+namespace IngameScript
 {
-    public sealed class Program : MyGridProgram
+    partial class Program : MyGridProgram
     {
-        //--------------------------------------------------------------------------------------
-        private List<IMyMotorAdvancedStator> wings = new List<IMyMotorAdvancedStator>();
-        private List<IMyMotorAdvancedStator> wings_updown = new List<IMyMotorAdvancedStator>();
-        private IMyCockpit cockpit;
-        private IMyGyro gyro;
-
+        List<IMyMotorAdvancedStator> wings_side = new List<IMyMotorAdvancedStator>();
+        List<IMyMotorAdvancedStator> wings_roll = new List<IMyMotorAdvancedStator>();
+        IMyCockpit cockpit;
+        IMyGyro gyro;
 
         public Program()
         {
             Runtime.UpdateFrequency = UpdateFrequency.Update1;
-            GridTerminalSystem.GetBlockGroupWithName("wings").GetBlocksOfType(wings);
-            GridTerminalSystem.GetBlockGroupWithName("wings updown").GetBlocksOfType(wings_updown);
-            cockpit = GridTerminalSystem.GetBlockWithName("cockpit") as IMyCockpit;
+
+            GridTerminalSystem.GetBlockGroupWithName("!Wings Speed").GetBlocksOfType(wings_side);
+            GridTerminalSystem.GetBlockGroupWithName("!Wings Roll").GetBlocksOfType(wings_roll);
+            cockpit = GridTerminalSystem.GetBlockWithName("!cockpit") as IMyCockpit;
             gyro = GridTerminalSystem.GetBlockWithName("gyro") as IMyGyro;
         }
 
         public void Main(string argument, UpdateType updateSource)
         {
             Vector3D LinearVelocity = cockpit.GetShipVelocities().LinearVelocity;
-            float speed = (float)Math.Abs(LinearVelocity.X+LinearVelocity.Y+LinearVelocity.Z);
-            if (speed < 10)
+            float speed = (float)LinearVelocity.Length();  // Реальная скорость
+            foreach (IMyMotorAdvancedStator hinge in wings_side)
             {
-                foreach (var hinge in wings)
-                {
-                    if (hinge.CustomName != "wings up")
-                    {
-                        hinge.LowerLimitDeg = Math.Max(
-                            speed * -1 / 2, -30);
-                    }
-                    else
-                    {
-                        hinge.UpperLimitDeg = Math.Min(
-                            (speed / 2) - 20, 45);
-                    }
-                }
+                hinge.LowerLimitDeg = Math.Max(speed * -1, -30);
             }
 
-            Vector3D AngularVelocity = cockpit.GetShipVelocities().AngularVelocity;
-            double rotate = (float)(AngularVelocity.X+AngularVelocity.Y+AngularVelocity.Z);
-            if (Math.Abs(rotate) > 1)
+            // Получаем угловую скорость корабля
+            Vector3D angularVelocity = cockpit.GetShipVelocities().AngularVelocity;
+
+            // Выводим угловую скорость на экран
+            Echo("Angular Velocity X = " + angularVelocity.X.ToString());
+            Echo("--------------------");
+            Echo("Angular Velocity Y = " + angularVelocity.Y.ToString());
+            Echo("--------------------");
+            Echo("Angular Velocity Z = " + angularVelocity.Z.ToString());
+
+            // Управление крыльями в зависимости от крена
+            foreach (var hinge in wings_roll)
             {
-                foreach (var hinge in wings_updown)
+                float targetVelocity;
+
+                // Если крен больше порогового значения, изменяем угол
+                if (Math.Abs(angularVelocity.X) > 0.01)
                 {
-                    hinge.LowerLimitDeg = Math.Max((float)rotate * 100, -25);
+                    targetVelocity = MathHelper.Clamp((float)angularVelocity.X * 0.5f, -1f, 1f);
                 }
+                else
+                {
+                    // Возвращаем в нулевое положение, если крен меньше порога
+                    targetVelocity = hinge.Angle * -5f;  // Быстро возвращаем в 0
+                }
+
+                hinge.TargetVelocityRad = targetVelocity;
             }
         }
-        //--------------------------------------------------------------------------------------
-
     }
 }
