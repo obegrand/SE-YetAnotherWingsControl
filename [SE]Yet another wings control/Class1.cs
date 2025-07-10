@@ -50,11 +50,11 @@ namespace IngameScript
             Vector3D angularVelocity = cockpit.GetShipVelocities().AngularVelocity;
 
             // Выводим угловую скорость на экран
-            Echo("Angular Velocity X = " + angularVelocity.X.ToString());
-            Echo("--------------------");
-            Echo("Angular Velocity Y = " + angularVelocity.Y.ToString());
-            Echo("--------------------");
-            Echo("Angular Velocity Z = " + angularVelocity.Z.ToString());
+            //Echo("Angular Velocity X = " + angularVelocity.X.ToString());
+            //Echo("--------------------");
+            //Echo("Angular Velocity Y = " + angularVelocity.Y.ToString());
+            //Echo("--------------------");
+            //Echo("Angular Velocity Z = " + angularVelocity.Z.ToString());
 
             // Управление крыльями в зависимости от крена
             foreach (var hinge in wings_roll)
